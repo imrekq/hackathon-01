@@ -1,0 +1,31 @@
+<%- include('header.html', { title: title }); -%>
+
+<body class="d-flex flex-row justify-content-center align-items-center" style="height: 100vh;">
+    <form method="POST" action="/login" autocomplete="off">
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Hackathon-01</h1>
+        </div>
+
+        <div class="form-group row">
+            <label for="username" class="col-sm-4 col-form-label">Username</label>
+            <div class="col-sm-8">
+                <input type="username" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="password" class="col-sm-4 col-form-label">Password</label>
+            <div class="col-sm-8">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+
+        <div class="alert alert-light" role="alert">
+            Are you here for the first time? <a href="/register">Register</a>
+        </div>
+    </form>
+</body>
+
+<%- include('footer.html'); -%>

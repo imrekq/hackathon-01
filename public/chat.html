@@ -1,0 +1,27 @@
+<%- include('header.html', { title: title }); -%>
+
+<body style="padding: 80px 40px 40px;">
+    <nav class="navbar fixed-top navbar-light bg-primary">
+        <a class="navbar-brand" href="/">Chat</a>
+    </nav>
+
+    <div class="flex-column justify-content-center align-items-center">
+        <form class="d-flex flex-column" method="POST" action="/chat" autocomplete="off">
+
+            <div class="form-group">
+                <textarea class="form-control" id="text" name="text" rows="3"></textarea>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+        </form>
+
+        <% posts.forEach(function(post){ %>
+        <div class="alert alert-info" role="alert" style="margin-top: 20px;">
+            <%- post.text -%>
+        </div>
+        <% }); %>
+    </div>
+
+</body>
+
+<%- include('footer.html'); -%>
