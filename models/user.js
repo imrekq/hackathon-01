@@ -50,5 +50,6 @@ sequelize.sync()
     .catch(error => console.log('This error occured', error));
 
 User.hasMany(Post);
+Post.hasOne(User);
 
 module.exports = User;

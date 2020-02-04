@@ -4,6 +4,9 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const ejs = require('ejs');
 const fs = require('fs');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+
 const app = express();
 
 const User = require('./models/user');
@@ -67,32 +70,59 @@ app.route('/login')
         const username = req.body.username;
         const password = req.body.password;
 
-        User.findOne({ where: { username: username } }).then(function (user) {
+        User.findOne({
+            where: { username: username }
+        })
+            .then(function (user) {
 
-            if (!user) {
-                res.redirect('/login');
-            }
-            else if (!user.validPassword(password)) {
-                res.redirect('/login');
-            } else {
-                req.session.user = user.dataValues;
-                res.redirect('/chat');
-            }
-        });
+                if (!user) {
+                    res.redirect('/login');
+                }
+                else if (!user.validPassword(password)) {
+                    res.redirect('/login');
+                } else {
+                    req.session.user = user.dataValues;
+                    res.redirect('/chat');
+                }
+            });
     });
 
 app.route('/register')
     .get(sessionChecker, (req, res) => {
         res.render('register', { title: 'Register' });
+    })
+    .post(sessionChecker, (req, res) => {
+        const body = req.body;
+
+        if (body.password === body.repeatPassword) {
+            User.create({
+                username: body.username,
+                password: body.password,
+                team: body.team
+            }).then(() => {
+                res.redirect('/login');
+            });
+        } else {
+            res.status(400);
+        }
     });
 
 app.route('/chat')
     .get(userChecker, (req, res) => {
-        User.findOne({id: req.session.user.id})
-            .then((user) => {
-                user.getPosts().then((posts) => {
-                    res.render('chat', { title: 'Chat', posts: posts });
+        User.findOne({ username: 'admin'})
+            .then((admin) => {
+                Post.findAll({
+                    where: {
+                        [Op.and]: [{
+                            [Op.or]: [{ userId: req.session.user.id }, { userId: admin.id }],
+                            text: { [Op.substring]: req.query.search || '' }
+                        }]
+                    },
+                    order: [['createdAt', 'DESC']]
                 })
+                    .then((posts) => {
+                        res.render('chat', { title: 'Chat', posts: posts, search: req.query.search || '' });
+                    })
             });
     })
     .post(userChecker, (req, res) => {

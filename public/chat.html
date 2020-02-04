@@ -15,6 +15,17 @@
             <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
         </form>
 
+        <hr/>
+
+        <form class="d-flex flex-column" method="GET" action="/chat" autocomplete="off">
+
+            <div class="form-group">
+                <input id="search" name="search" class="form-control" placeholder="Search" value="<%- search -%>"/>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+        </form>
+
         <% posts.forEach(function(post){ %>
         <div class="alert alert-info" role="alert" style="margin-top: 20px;">
             <%- post.text -%>
