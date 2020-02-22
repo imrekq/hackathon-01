@@ -109,21 +109,18 @@ app.route('/register')
 
 app.route('/chat')
     .get(userChecker, (req, res) => {
-        User.findOne({ username: 'admin'})
-            .then((admin) => {
-                Post.findAll({
-                    where: {
-                        [Op.and]: [{
-                            [Op.or]: [{ userId: req.session.user.id }, { userId: admin.id }],
-                            text: { [Op.substring]: req.query.search || '' }
-                        }]
-                    },
-                    order: [['createdAt', 'DESC']]
-                })
-                    .then((posts) => {
-                        res.render('chat', { title: 'Chat', posts: posts, search: req.query.search || '' });
-                    })
-            });
+        Post.findAll({
+            where: {
+                [Op.and]: [{
+                    text: { [Op.substring]: req.query.search || '' }
+                }]
+            },
+            order: [['createdAt', 'DESC']],
+            include: ['user']
+        })
+            .then((posts) => {
+                res.render('chat', { title: 'Chat', posts, search: req.query.search || '' });
+            })
     })
     .post(userChecker, (req, res) => {
         const text = req.body.text;
@@ -134,6 +131,7 @@ app.route('/chat')
             res.redirect('/chat');
         });
     });
+
 
 app.get('/logout', (req, res) => {
     if (req.session.user && req.cookies[COOKIE_USER_ID]) {

@@ -5,6 +5,9 @@
   "repository": "git@github.com:imrekb/hackathon-01.git",
   "author": "Oleg Ulyanov <imrekbg@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "bcrypt": "3.0.7",
     "body-parser": "1.19.0",
