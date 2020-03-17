@@ -30,7 +30,7 @@ const userChecker = (req, res, next) => {
 
 const COOKIE_USER_ID = 'user_id';
 
-app.set('port', 3000);
+app.set('port', process.env.PORT || 3000);
 app.set('views', './public');
 app.set('view engine', 'html');
 app.engine('html', ejs.renderFile);
