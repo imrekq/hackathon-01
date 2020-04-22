@@ -11,6 +11,7 @@ const app = express();
 
 const User = require('./models/user');
 const Post = require('./models/post');
+const Log = require('./models/log');
 
 const sessionChecker = (req, res, next) => {
     if (req.session.user && req.cookies.user_id) {
@@ -119,7 +120,12 @@ app.route('/chat')
             include: ['user']
         })
             .then((posts) => {
-                res.render('chat', { title: 'Chat', posts, search: req.query.search || '' });
+                res.render('chat', {
+                    title: 'Chat',
+                    posts,
+                    search: req.query.search || '',
+                    username: req.session.user.username
+                });
             })
     })
     .post(userChecker, (req, res) => {
@@ -131,6 +137,36 @@ app.route('/chat')
             res.redirect('/chat');
         });
     });
+
+app.route('/home')
+    .get(userChecker, (req, res) => {
+        Log.findAll({
+            where: {
+                username: req.session.user.username
+            },
+            order: [['createdAt', 'DESC']]
+        })
+            .then((logs) => {
+                res.render('home', {
+                    title: 'home',
+                    logs,
+                    host: req.headers.host,
+                    username: req.session.user.username
+                });
+            })
+    });
+
+app.route('/q')
+    .get((req, res) => {
+        Log.create({
+            username: req.query.u,
+            text: req.query.t
+        }).then(() => {
+            res.render('answer');
+        });
+    });
+
+
 
 
 app.get('/logout', (req, res) => {
