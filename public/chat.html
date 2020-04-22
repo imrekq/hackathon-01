@@ -1,70 +1,103 @@
 <%- include('header.html', { title: title }); -%>
 
-<body style="padding: 80px 40px 40px;">
-    <nav class="navbar fixed-top navbar-light bg-light">
-        <a class="navbar-brand" href="/">Chat</a>
+<body style="padding: 80px 0px">
 
-        <div class="justify-content-right">
-            <ul class="navbar-nav mr-auto">
+    <div class="container">
+
+
+        <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+            <a class="navbar-brand" href="/">PT playgroud</a>
+            
+          
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/chat">Chat</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/home">🤵 <%- username -%></a>
+                </li>
+              </ul>
+              
+              <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Logout</a>
                 </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="flex-column justify-content-center align-items-center">
-        <form class="d-flex flex-column" method="POST" action="/chat" autocomplete="off">
-
-            <div class="form-group">
-                <textarea class="form-control" id="text" name="text" rows="3" onkeypress="onKeyPress(event)"></textarea>
+              </ul>
             </div>
+          </nav>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
-        </form>
 
-        <hr />
-
-        <form class="form-inline flex-row" method="GET" action="/chat" autocomplete="off">
-            <input id="search" name="search" class="d-flex flex-fill form-control" placeholder="Search"
-                value="<%- search -%>" />
-
-            <button class="btn btn-primary ml-2" type="submit">Search</button>
-        </form>
-
-        <% posts.forEach(function(post){ %>
-        <div class="alert alert-info" role="alert" style="margin-top: 20px;">
-            <a href="#<%- post.user.username -%>"><strong class="username badge badge-light" data-username="<%- post.user.username -%>" onclick="highlight('<%- post.user.username -%>')"><%- post.user.username -%></strong></a>
-            <%- post.text -%>
+    
+    
+        <div class="flex-column justify-content-center align-items-center">
+            <form class="d-flex flex-column" method="POST" action="/chat" autocomplete="off">
+    
+                <div class="form-group">
+                    <textarea class="form-control" id="text" name="text" rows="3" onkeypress="onKeyPress(event)"></textarea>
+                </div>
+    
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+            </form>
+    
+            <hr />
+    
+            <form class="form-inline flex-row" method="GET" action="/chat" autocomplete="off">
+                <input id="search" name="search" class="d-flex flex-fill form-control" placeholder="Search"
+                    value="<%- search -%>" />
+    
+                <button class="btn btn-primary ml-2" type="submit">Search</button>
+            </form>
+    
+            <% posts.forEach(function(post){ %>
+            <div class="alert alert-info" role="alert" style="margin-top: 20px;">
+                <h6>
+                    <a href="#<%- post.user.username -%>">
+                        <strong class="username badge badge-light"
+                            data-username="<%- post.user.username -%>"
+                            onclick="highlight('<%- post.user.username -%>')"><%- post.user.username -%></strong>
+                    </a>
+                    <small class="text-muted"><%- post.createdAt.toLocaleTimeString() -%></small>
+                </h6>
+                <div>
+                    <%- post.text -%>
+                </div>            
+            </div>
+            <% }) %>
+    
+           
         </div>
-        <% }) %>
+    </div>
 
-        <script>
-            const hash = location.hash.substr(1);
-            if (hash) {
-                const username = decodeURI(hash);
-                document.write(`<div  style="margin-top: 20px;">Highlight by user: <span class="badge badge-warning">${username}</span></div>`);
-                const elements = document.querySelectorAll(`[data-username="${username}"]`);
-                elements.forEach((element) => {
-                    element.classList.remove('badge-light');
-                    element.classList.add('badge-warning');
-                });
-            }
-        </script>
 
-        <script>
-            function onKeyPress(event) {
-                if(event.keyCode == 13)
-                {
-                    document.forms[0].submit();
-                }
-            }
 
-            function highlight(username) {
-                location.hash = username;
-                location.reload();
+    <script>
+        const hash = location.hash.substr(1);
+        if (hash) {
+            const username = decodeURI(hash);
+            document.write(`<div  style="margin-top: 20px;">Highlight by user: <span class="badge badge-warning">${username}</span></div>`);
+            const elements = document.querySelectorAll(`[data-username="${username}"]`);
+            elements.forEach((element) => {
+                element.classList.remove('badge-light');
+                element.classList.add('badge-warning');
+            });
+        }
+    </script>
+
+    <script>
+        function onKeyPress(event) {
+            if(event.keyCode == 13)
+            {
+                document.forms[0].submit();
             }
-        </script>
+        }
+
+        function highlight(username) {
+            location.hash = username;
+            location.reload();
+        }
+    </script>
+    
 </body>
 
 <%- include('footer.html'); -%>
