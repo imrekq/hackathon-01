@@ -31,13 +31,17 @@
     
     
         <div class="flex-column justify-content-center align-items-center">
-    
+            <div class="alert alert-info" role="alert">
+                Send any text to this page via the following GET requst: <br>
+                <b>http://<%- host -%>/q?u=<%- username -%>&t=BLAHBLAH</b>
+            </div>
+            <hr>
             <% logs.forEach(function(log){ %>
             <div class="alert alert-info" role="alert" style="margin-top: 20px;">
                 <h6>
                     <small class="text-muted"><%- log.createdAt.toLocaleTimeString() -%></small>
                 </h6>
-                <pre><%- log.text -%></pre>            
+                <div style="word-break: break-all;"><%- log.text -%></div>            
             </div>
             <% }) %>
     

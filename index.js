@@ -150,6 +150,7 @@ app.route('/home')
                 res.render('home', {
                     title: 'home',
                     logs,
+                    host: req.headers.host,
                     username: req.session.user.username
                 });
             })
