@@ -1,7 +1,5 @@
 const Sequelize = require('sequelize');
 
-const User = require('./user');
-
 const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: './database.sqlite'
